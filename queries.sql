@@ -3,7 +3,7 @@
 select sum(amount) as total, entry.item 
     from entry 
     join itemcategory on entry.item=itemcategory.item
-    where itemcategory.category='Workout'
+    where itemcategory.category='workout'
     group by entry.item 
     order by total desc
 
@@ -11,8 +11,8 @@ select sum(amount) as total, entry.item
 -- all runs over time (interesting for avg length)
 select item, datetime, amount 
 from entry 
-where lower(entry.item) like '%run%'
-and lower(entry.item) <> 'five mile run'
+where entry.item like '%run%'
+and entry.item <> 'five mile run'
 order by datetime
 
 
@@ -20,7 +20,7 @@ order by datetime
 select entry.item, sum(amount) as total
 from entry 
 join itemcategory on itemcategory.item=entry.item
-where itemcategory.category='Workout'
+where itemcategory.category='workout'
 and entry.datetime < '2018-07-02'
 and entry.datetime > '2018-02-18'
 group by entry.item
@@ -30,7 +30,7 @@ order by total desc
 select entry.item, itemcategory.category, sum(amount) as total
 from entry 
 join itemcategory on itemcategory.item=entry.item
-where lower(itemcategory.category) in ('cardio', 'climbing', 'strength', 'lactate threshold', 'misc')
+where itemcategory.category in ('cardio', 'climbing', 'strength', 'lactate threshold', 'misc')
 and entry.datetime < '2018-07-02'
 and entry.datetime > '2018-02-18'
 group by entry.item
@@ -40,7 +40,7 @@ order by total desc
 select itemcategory.category, sum(amount) as total
 from entry 
 join itemcategory on itemcategory.item=entry.item
-where lower(itemcategory.category) in ('cardio', 'climbing', 'strength', 'lactate threshold', 'misc')
+where itemcategory.category in ('cardio', 'climbing', 'strength', 'lactate threshold', 'misc')
 and entry.datetime < '2018-07-02'
 and entry.datetime > '2018-02-18'
 group by itemcategory.category
@@ -50,5 +50,5 @@ order by total desc
 select sum(amount) as total, strftime('%Y', datetime) as year
 from entry 
 join itemcategory on itemcategory.item=entry.item
-where lower(itemcategory.category) ='workout'
+where itemcategory.category ='workout'
 group by year
