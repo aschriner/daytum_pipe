@@ -62,7 +62,7 @@ def load_data(cursor):
             categories = [text.strip(' ') for text in row['categories'].split(';') if text]
             all_categories.update(set(categories))
             items_and_categories[row['name']] = categories
-    
+
     load_items(cursor, items_and_categories.keys())
     load_categories(cursor, all_categories)
     load_itemcategory(cursor, items_and_categories)
@@ -72,25 +72,25 @@ def load_data(cursor):
 def load_items(cursor, items):
     insert_item = """INSERT INTO item VALUES (?)"""
     for item in items:
-        cursor.execute(insert_item, (item,))
+        cursor.execute(insert_item, (item.lower(),))
 
 def load_categories(cursor, categories):
     insert_category = """INSERT INTO category VALUES (?)"""
     for category in categories:
-        cursor.execute(insert_category, (category,))
+        cursor.execute(insert_category, (category.lower(),))
         
 def load_itemcategory(cursor, items_and_categories):
     insert_item_category = """INSERT INTO itemcategory VALUES (?, ?) -- item, category"""
     for item, categories in items_and_categories.items():
         for category in categories:
-            cursor.execute(insert_item_category, (item, category))
+            cursor.execute(insert_item_category, (item.lower(), category.lower()))
             
 def load_entries(cursor, entries):
     insert_entry = """INSERT INTO entry VALUES (?,?,?) -- item, datetime, amount"""
     datetime_format = '%a %b %d %H:%M:%S UTC %Y' # Sat Jul 28 15:59:00 UTC 2018
     for entry in entries:
         timestamp = datetime.strptime(entry['date'], datetime_format)
-        cursor.execute(insert_entry, (entry['name'], timestamp, entry['amount']))
+        cursor.execute(insert_entry, (entry['name'].lower(), timestamp, entry['amount']))
 
 
 def delete_old_db(db_file):
